@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow | Portafolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lacquer&family=Mansalva&family=Neucha&family=Sriracha&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>TaskFlow</h1>
+            <p>Haz que hoy cuente ✮⋆˙</p>
+        </header>
+
+        <div id="notificacion" class="oculto"></div>
+        
+        <form id="form-tarea">
+            <input type="text" id="input-tarea" placeholder="Hoy es un gran día para..." maxlength="50" required>
+            <button type="submit" id="btn-agregar">Agregar Tarea</button>
+        </form>
+        <smail id="contador-caracteres">Caracteres: 0/50</smail>
+        <div class="panel-api">
+            <button id="btn-sicronizar">Cargar Tareas (API)</button>
+        </div>
+        
+        <ul class="lista-tareas"></ul>
+    </div>
+    <script src="./assets/js/main.js"></script>
+</body>
+</html>
