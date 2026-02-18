@@ -123,4 +123,64 @@ listaTareas.addEventListener("click", (e) => {
     renderizarTareas();
 });
 
+//función que muestra una notificación tras 2 segundos
+const mostrarNotificacion = (mensaje) => {
+    setTimeout(() => {
+        notificacion.textContent = mensaje;
+        notificacion.style.display = "block";
 
+        //se oculta después de 3 segundos
+        setTimeout(() => { notificacion.style.display = "none"; }, 3000);
+    }, 2000);
+}
+
+formulario.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const texto = inputTarea.value.trim();
+
+    if (texto !== "") {
+        //retardo al agregar una tarea
+        setTimeout(() => {
+            const nuevaTarea = new Tarea({ descripcion: texto });
+            gestor.agregarTarea(nuevaTarea);
+
+            //guardar la tarea
+            guardarEnAPI(nuevaTarea);
+
+            inputTarea.value = "";
+            contadorCaracteres.textContent = `Caracteres: 0/50`;
+
+            guardarEnStorage();
+            renderizarTareas();
+
+            //llamando a la notificación después de que la tarea se haya agregado y renderizado
+            mostrarNotificacion("¡Acción realizada con éxito!");
+        }, 500);
+    }
+});
+
+//contador regresivo para tareas con fecha límite de 8 horas
+setInterval(() => {
+    const ahora = Date.now();
+
+    gestor.tareas.forEach(tarea => {
+        if (tarea.estado !== "completada") {
+            const elementoReloj = document.getElementById(`reloj-${tarea.id}`);
+
+            if (elementoReloj) {
+                const tiempoRestante = tarea.fechaLimite - ahora;
+
+                if (tiempoRestante <= 0) {
+                    elementoReloj.textContent = "¡Tiempo agotado!";
+                    elementoReloj.style.color = "red";
+                } else {
+                    const horas = Math.floor((tiempoRestante / (1000 * 60 * 60)) % 24);
+                    const minutos = Math.floor((tiempoRestante / 1000 / 60) % 60);
+                    const segundos = Math.floor((tiempoRestante / 1000) % 60);
+
+                    elementoReloj.textContent = `Te quedan ${horas}h ${minutos}m ${segundos}s para completar esta tarea`;
+                }
+            }
+        }
+    });
+}, 1000);
