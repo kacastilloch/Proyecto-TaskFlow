@@ -75,3 +75,116 @@ form {
     margin-bottom: 1rem;
     text-align: right;
 }
+
+.panel-api {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+#btn-sincronizar {
+    background-color: #15212a;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#btn-sincronizar:hover {
+    background-color: #99c9bd;
+    color: #000;
+}
+
+ul {
+    list-style: none;
+    background-color: #99c9bd;
+    border-radius: 5px;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #f4c9a3;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    transition: background 0.2s;
+}
+
+li:hover {
+    background-color: #99c9bd;
+}
+
+.info-tarea {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+    padding-right: 10px;
+}
+
+.info-tarea span {
+    word-wrap: break-word;
+}
+
+.tiempo-restante {
+    font-size: 0.8rem;
+    color: #15212a5d;
+    font-weight: bold;
+}
+
+.badge-completada {
+    font-size: 0.8rem;
+    color: #26c012;
+    font-weight: bold;
+}
+
+.completada {
+    background-color: #99c9bd;
+    border-color: #ddd;
+}
+
+.completada span {
+    text-decoration: line-through;
+    color: #15212a;
+}
+
+.acciones {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.btn-icono {
+    padding: 0.4rem 0.6rem;
+    font-size: 1rem;
+    background: #feab8d;
+    color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-icono:hover {
+    background: #bdc3c7;
+}
+
+#notificacion {
+    background: #15212a;
+    color: white;
+    text-align: center;
+    padding: 0.8rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    transition: 0.3s;
+}
+
+.oculto {
+    display: none;
+}
