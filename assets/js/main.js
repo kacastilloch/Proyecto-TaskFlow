@@ -45,3 +45,82 @@ class GestorTareas {
 }
 
 const gestor = new GestorTareas();
+
+//eventos y manipulación del DOM
+const formulario = document.getElementById("form-tarea");
+const inputTarea = document.getElementById("input-tarea");
+const listaTareas = document.getElementById("lista-tareas");
+const notificacion = document.getElementById("notificacion");
+const contadorCaracteres = document.getElementById("contador-caracteres");
+
+//keyup para contar caracteres en tiempo real
+inputTarea.addEventListener("keyup", () => {
+    //uso de Template Literals
+    const longitud = inputTarea.value.length;
+    contadorCaracteres.textContent = `Caracteres: ${longitud}/50`;
+});
+
+const renderizarTareas = () => {
+    listaTareas.innerHTML = "";
+
+    gestor.tareas.forEach(tarea => {
+        const li = document.createElement("li");
+
+        if (tarea.estado === "completada") {
+            li.classList.add("completada");
+            li.innerHTML = `
+                <div class="info-tarea">
+                    <span>${tarea.descripcion}</span>
+                    <small class="badge-completada">✓ Tarea finalizada</small>
+                    <small style="color: #999; font-size: 0.75rem;">Creada el: ${tarea.fechaCreacion}</small>
+                </div>
+                <div class="acciones">
+                    <button class="btn-icono btn-eliminar" data-id="${tarea.id}">メ</button>
+                </div>
+            `;
+        } else {
+            li.innerHTML = `
+                <div class="info-tarea">
+                    <span>${tarea.descripcion}</span>
+                    <small style="color: #7f8c8d; font-size: 0.75rem;">Creada el: ${tarea.fechaCreacion}</small>
+                    <small class="tiempo-restante" id="reloj-${tarea.id}">Calculando tiempo...</small>
+                </div>
+                <div class="acciones">
+                    <button class="btn-icono btn-estado" data-id="${tarea.id}">✓</button>
+                    <button class="btn-icono btn-editar" data-id="${tarea.id}">🖊</button>
+                    <button class="btn-icono btn-eliminar" data-id="${tarea.id}">メ</button>
+                </div>
+            `;
+        }
+
+        //mouseover y mouseout
+        li.addEventListener("mouseover", () => li.style.backgroundColor = "#f4c9a3");
+        li.addEventListener("mouseout", () => li.style.backgroundColor = "transparent");
+
+        listaTareas.appendChild(li);
+    });
+}
+
+listaTareas.addEventListener("click", (e) => {
+    const idTarea = Number(e.target.getAttribute("data-id"));
+
+    if (e.target.classList.contains("btn-eliminar")) {
+        gestor.eliminarTarea(idTarea);
+    }
+    else if (e.target.classList.contains("btn-estado")) {
+        const tarea = gestor.tareas.find(t => t.id === idTarea);
+        tarea.marcarCompletada();
+        console.log(`Tarea completada permanentemente`);
+    }
+    else if (e.target.classList.contains("btn-editar")) {
+        const nuevoTexto = prompt("Edita tu tarea:");
+        if (nuevoTexto !== null && nuevoTexto.trim() !== "") {
+            gestor.editarTarea(idTarea, nuevoTexto.trim());
+        }
+    }
+
+    guardarEnStorage();
+    renderizarTareas();
+});
+
+
