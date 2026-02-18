@@ -36,7 +36,7 @@ class GestorTareas {
     }
 
     editarTarea = (id, nuevoTexto) => {
-        const tarea = this.tarea.find(t => t.id === id);
+        const tarea = this.tareas.find(t => t.id === id);
         if (tarea && tarea.estado !== "completada") {
             console.log(`Tarea modificada de: "${tarea.descripcion}" a "${nuevoTexto}" con éxito`);
             tarea.editarDescripcion(nuevoTexto);
