@@ -184,3 +184,74 @@ setInterval(() => {
         }
     });
 }, 1000);
+
+//función que guarda tareas en una API
+const guardarEnAPI = async (tarea) => {
+    //Manejo de errores en peticiones asíncronas con try/catch
+    try {
+        const respuesta = await fetch("https://jsonplaceholder.typicode.com/todos", {
+            method: 'POST',
+            body: JSON.stringify({
+                title: tarea.descripcion,
+                completed: tarea.estado === "completada",
+                userId: 1,
+            }),
+            headers: { 'Content-type': 'application/json; charset=UTF-8' },
+        });
+
+        const datosAsincronos = await respuesta.json();
+        console.log("Tarea enviada y guardada en la API externa (POST)", datosAsincronos);
+    } catch (error) {
+        console.error("Error al intentar guardar en la API", error);
+    }
+}
+
+//función que recupera tareas de una API
+const recuperarDesdeAPI = async () => {
+    try {
+        //se aprovecha la notificación para avisar
+        mostrarNotificacion("Descargando tareas de la API...");
+
+        //Uso fetch para obtener datos
+        const respuesta = await fetch("https://jsonplaceholder.typicode.com/todos?_limit=2");
+        const tareasAPI = await respuesta.json();
+
+        tareasAPI.forEach(tarea => {
+            const nueva = new Tarea({ descripcion: tarea.title, estado: tarea.completed ? "completada" : "pendiente" });
+            gestor.agregarTarea(nueva);
+        });
+
+        guardarEnStorage();
+        renderizarTareas();
+        console.log("Tareas recuperadas desde la API externa (GET)");
+
+    } catch (error) {
+        console.error("Error al consumir la API:", error);
+    }
+}
+
+//se conecta el botón de sincronización
+document.getElementById("btn-sincronizar").addEventListener("click", recuperarDesdeAPI);
+
+//se almacena y recupera tareas desde localStorage
+const guardarEnStorage = () => {
+    localStorage.setItem("taskflow_tareas", JSON.stringify(gestor.tareas));
+}
+
+const cargarDesdeStorage = () => {
+    const datos = localStorage.getItem("taskflow_tareas");
+    if (datos) {
+        const tareasParseadas = JSON.parse(datos);
+        gestor.tareas = tareasParseadas.map(t => new Tarea({
+            id: t.id,
+            descripcion: t.descripcion,
+            estado: t.estado,
+            fechaLimite: t.fechaLimite,
+            fechaCreacion: t.fechaCreacion
+        }));
+        renderizarTareas();
+    }
+}
+
+//iniciamos la aplicación cargando tareas desde el almacenamiento local
+cargarDesdeStorage();
